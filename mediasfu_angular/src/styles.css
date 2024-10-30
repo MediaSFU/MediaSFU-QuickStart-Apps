@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+app-mediasfu-generic {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+  }
+
+app-mediasfu-webinar {
+flex: 1;
+width: 100%;
+max-width: 100%;
+overflow: auto;
+}
+
+app-mediasfu-conference {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
+
+app-mediasfu-broadcast {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
+
+app-mediasfu-chat {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+}
+  
