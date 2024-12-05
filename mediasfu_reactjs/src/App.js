@@ -17,29 +17,71 @@ import { generateRandomWaitingRoomList } from 'mediasfu-reactjs';
 
 
 
+/**
+ * The main application component for MediaSFU.
+ *
+ * This component initializes the necessary configuration and credentials for the MediaSFU application.
+ * Users can specify their own Community Edition (CE) server, utilize MediaSFU Cloud by default, or enable MediaSFU Cloud for egress features.
+ *
+ * @remarks
+ * - **Using Your Own Community Edition (CE) Server**: Set the `localLink` to point to your CE server.
+ * - **Using MediaSFU Cloud by Default**: If not using a custom server (`localLink` is empty), the application connects to MediaSFU Cloud.
+ * - **MediaSFU Cloud Egress Features**: To enable cloud recording, capturing, and returning real-time images and audio buffers,
+ *   set `connectMediaSFU` to `true` in addition to specifying your `localLink`.
+ * - **Credentials Requirement**: If not using your own server, provide `apiUserName` and `apiKey`. The same applies when using MediaSFU Cloud for egress.
+ * - **Deprecated Feature**: `useLocalUIMode` is deprecated due to updates for strong typing and improved configuration options.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * // Example usage of the App component
+ * <App />
+ * ```
+ */
 const App = () => {
+  // ========================
+  // ====== CONFIGURATION ======
+  // ========================
+
   // Mediasfu account credentials
   // Replace 'your_api_username' and 'your_api_key' with your actual credentials
+  // Not needed if using a custom server with no MediaSFU Cloud Egress (recording, ...)
   const credentials = { apiUserName: 'your_api_username', apiKey: 'your_api_key' };
 
-  // Whether to use seed data for generating random participants and messages
-  // Set to true if you want to run the application in local UI mode with seed data
+  // Specify your Community Edition (CE) server link or leave as an empty string if not using a custom server
+  const localLink = 'http://localhost:3000'; // Set to '' if not using your own server
+
+  /**
+   * Automatically set `connectMediaSFU` to `true` if `localLink` is provided,
+   * indicating the use of MediaSFU Cloud by default.
+   *
+   * - If `localLink` is not empty, MediaSFU Cloud will be used for additional features.
+   * - If `localLink` is empty, the application will connect to MediaSFU Cloud by default.
+   */
+  const connectMediaSFU = localLink.trim() !== '';
+
+  // ========================
+  // ====== USE CASES ======
+  // ========================
+
+  // Deprecated Feature: useLocalUIMode
+  // This feature is deprecated due to updates for strong typing.
+  // It is no longer required and should not be used in new implementations.
+
+  /**
+   * Uncomment and configure the following section if you intend to use seed data
+   * for generating random participants and messages.
+   *
+   * Note: This is deprecated and maintained only for legacy purposes.
+   */
+  /*
   const useSeed = false;
   let seedData = {};
 
-  // Event type ('broadcast', 'chat', 'webinar', 'conference')
-  // Set this to match the component you are using
-  let eventType = 'broadcast';
-
-  // If using seed data, generate random participants and messages
   if (useSeed) {
-    // Name of the member
     const memberName = 'Prince';
-
-    // Name of the host
     const hostName = 'Fred';
 
-    // Generate random participants
     const participants_ = generateRandomParticipants({
       member: memberName,
       coHost: '',
@@ -47,7 +89,6 @@ const App = () => {
       forChatBroadcast: eventType === 'broadcast' || eventType === 'chat',
     });
 
-    // Generate random messages
     const messages_ = generateRandomMessages({
       participants: participants_,
       member: memberName,
@@ -55,7 +96,6 @@ const App = () => {
       forChatBroadcast: eventType === 'broadcast' || eventType === 'chat',
     });
 
-    // Generate random requests
     const requests_ = generateRandomRequestList({
       participants: participants_,
       hostName: memberName,
@@ -63,10 +103,8 @@ const App = () => {
       numberOfRequests: 3,
     });
 
-    // Generate random waiting list
     const waitingList_ = generateRandomWaitingRoomList();
 
-    // Assign generated data to seedData
     seedData = {
       participants: participants_,
       messages: messages_,
@@ -77,73 +115,150 @@ const App = () => {
       eventType: eventType,
     };
   }
+  */
 
-  // Whether to use local UI mode; prevents making requests to the Mediasfu servers during UI development
-  const useLocalUIMode = useSeed;
+  // ========================
+  // ====== COMPONENT SELECTION ======
+  // ========================
 
-  // Choose the Mediasfu component based on the event type
-  // Uncomment the component corresponding to your use case
+  /**
+   * Choose the Mediasfu component based on the event type and use case.
+   * Uncomment the component corresponding to your specific use case.
+   */
 
-  // Simple Use Case (Welcome Page)
-  // Renders the default welcome page
-  // No additional inputs required
+  // ------------------------
+  // ====== SIMPLE USE CASE ======
+  // ------------------------
+
+  /**
+   * **Simple Use Case (Welcome Page)**
+   *
+   * Renders the default welcome page.
+   * No additional inputs required.
+   */
   // return <MediasfuGeneric />;
 
-  // Use Case with Pre-Join Page (Credentials Required)
-  // Uses a pre-join page that requires users to enter credentials
+  // ------------------------
+  // ====== PRE-JOIN USE CASE ======
+  // ------------------------
+
+  /**
+   * **Use Case with Pre-Join Page (Credentials Required)**
+   *
+   * Uses a pre-join page that requires users to enter credentials.
+   */
   // return <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} />;
 
-  // Use Case with Local UI Mode (Seed Data Required)
-  // Runs the application in local UI mode using seed data
+  // ------------------------
+  // ====== SEED DATA USE CASE ======
+  // ------------------------
+
+  /**
+   * **Use Case with Local UI Mode (Seed Data Required)**
+   *
+   * Runs the application in local UI mode using seed data.
+   *
+   * @deprecated Due to updates for strong typing, this feature is deprecated.
+   */
   // return <MediasfuGeneric useLocalUIMode={true} useSeed={true} seedData={seedData} />;
 
-  // MediasfuBroadcast Component
-  // Uncomment to use the broadcast event type
-  // return (
-  //   <MediasfuBroadcast
-  //     credentials={credentials}
-  //     useLocalUIMode={useLocalUIMode}
-  //     useSeed={useSeed}
-  //     seedData={useSeed ? seedData : {}}
-  //   />
-  // );
+  // ------------------------
+  // ====== BROADCAST EVENT TYPE ======
+  // ------------------------
 
-  // MediasfuChat Component
-  // Uncomment to use the chat event type
-  // return (
-  //   <MediasfuChat
-  //     credentials={credentials}
-  //     useLocalUIMode={useLocalUIMode}
-  //     useSeed={useSeed}
-  //     seedData={useSeed ? seedData : {}}
-  //   />
-  // );
+  /**
+   * **MediasfuBroadcast Component**
+   *
+   * Uncomment to use the broadcast event type.
+   */
+  /*
+  return (
+    <MediasfuBroadcast
+      credentials={credentials}
+      localLink={localLink}
+      connectMediaSFU={connectMediaSFU}
+      // seedData={useSeed ? seedData : {}}
+    />
+  );
+  */
 
-  // MediasfuWebinar Component
-  // Uncomment to use the webinar event type
-  // return (
-  //   <MediasfuWebinar
-  //     credentials={credentials}
-  //     useLocalUIMode={useLocalUIMode}
-  //     useSeed={useSeed}
-  //     seedData={useSeed ? seedData : {}}
-  //   />
-  // );
+  // ------------------------
+  // ====== CHAT EVENT TYPE ======
+  // ------------------------
 
-  // MediasfuConference Component
-  // Uncomment to use the conference event type
-  // return (
-  //   <MediasfuConference
-  //     credentials={credentials}
-  //     useLocalUIMode={useLocalUIMode}
-  //     useSeed={useSeed}
-  //     seedData={useSeed ? seedData : {}}
-  //   />
-  // );
+  /**
+   * **MediasfuChat Component**
+   *
+   * Uncomment to use the chat event type.
+   */
+  /*
+  return (
+    <MediasfuChat
+      credentials={credentials}
+      localLink={localLink}
+      connectMediaSFU={connectMediaSFU}
+      // seedData={useSeed ? seedData : {}}
+    />
+  );
+  */
 
-  // Default to MediasfuGeneric without any props
-  // This will render the welcome page
-  return <MediasfuGeneric />;
+  // ------------------------
+  // ====== WEBINAR EVENT TYPE ======
+  // ------------------------
+
+  /**
+   * **MediasfuWebinar Component**
+   *
+   * Uncomment to use the webinar event type.
+   */
+  /*
+  return (
+    <MediasfuWebinar
+      credentials={credentials}
+      localLink={localLink}
+      connectMediaSFU={connectMediaSFU}
+      // seedData={useSeed ? seedData : {}}
+    />
+  );
+  */
+
+  // ------------------------
+  // ====== CONFERENCE EVENT TYPE ======
+  // ------------------------
+
+  /**
+   * **MediasfuConference Component**
+   *
+   * Uncomment to use the conference event type.
+   */
+  /*
+  return (
+    <MediasfuConference
+      credentials={credentials}
+      localLink={localLink}
+      connectMediaSFU={connectMediaSFU}
+      // seedData={useSeed ? seedData : {}}
+    />
+  );
+  */
+
+  // ========================
+  // ====== DEFAULT COMPONENT ======
+  // ========================
+
+  /**
+   * **Default to MediasfuGeneric with Updated Configuration**
+   *
+   * Renders the welcome page with specified server and cloud connection settings.
+   */
+  return (
+    <MediasfuGeneric
+      PrejoinPage={PreJoinPage}
+      credentials={credentials}
+      // localLink={localLink} // Uncomment to use a custom server
+      connectMediaSFU={connectMediaSFU}
+    />
+  );
 };
 
 export default App;
