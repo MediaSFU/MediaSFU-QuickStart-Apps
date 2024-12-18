@@ -396,10 +396,10 @@ packages:
     dependency: "direct main"
     description:
       name: mediasfu_sdk
-      sha256: bc50ead48d153abea95a0352b6edf2211665c058527e07a5a25fc7930bc06a32
+      sha256: faabef7ebf5fd34f3215c1c03d8f7936623d81b9f9b22ac32498d0ec160cb430
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   meta:
     dependency: transitive
     description:

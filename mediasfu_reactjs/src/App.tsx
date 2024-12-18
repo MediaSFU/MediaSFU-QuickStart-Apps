@@ -1,25 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
-
-// optional: import reanimated warning suppression
-import './reanimatedConfig.js';
-
-import { CreateMediaSFURoomOptions, createRoomOnMediaSFU, JoinMediaSFURoomOptions, joinRoomOnMediaSFU, MediasfuGeneric } from 'mediasfu-reactnative';
+import { useState } from 'react';
+import { CreateMediaSFURoomOptions, createRoomOnMediaSFU, JoinMediaSFURoomOptions, joinRoomOnMediaSFU, MediasfuGeneric } from 'mediasfu-reactjs';
 
 // Import specific Mediasfu view components
-import { MediasfuBroadcast } from 'mediasfu-reactnative';
-import { MediasfuChat } from 'mediasfu-reactnative';
-import { MediasfuWebinar } from 'mediasfu-reactnative';
-import { MediasfuConference } from 'mediasfu-reactnative';
+import { MediasfuBroadcast } from 'mediasfu-reactjs';
+import { MediasfuChat } from 'mediasfu-reactjs';
+import { MediasfuWebinar } from 'mediasfu-reactjs';
+import { MediasfuConference } from 'mediasfu-reactjs';
 
 // Import the PreJoinPage component for the Pre-Join Page use case
-import { PreJoinPage, PreJoinPageOptions } from 'mediasfu-reactnative';
+import { PreJoinPage, PreJoinPageOptions } from 'mediasfu-reactjs';
 
 // Import methods for generating random participants, messages, requests, and waiting room lists if using seed data
-import { generateRandomParticipants } from 'mediasfu-reactnative';
-import { generateRandomMessages } from 'mediasfu-reactnative';
-import { generateRandomRequestList } from 'mediasfu-reactnative';
-import { generateRandomWaitingRoomList } from 'mediasfu-reactnative';
+import { generateRandomParticipants } from 'mediasfu-reactjs';
+import { generateRandomMessages } from 'mediasfu-reactjs';
+import { generateRandomRequestList } from 'mediasfu-reactjs';
+import { generateRandomWaitingRoomList } from 'mediasfu-reactjs';
 
 
 
@@ -50,8 +45,6 @@ const App = () => {
   // Example:
   /*
   const credentials = {};
-  // If using localhost; you might need your actual local ip address instead of localhost
-  // const localLink = 'http://100.xx.xx.xx:3000';
   const localLink = 'http://your-ce-server.com'; //http://localhost:3000
   const connectMediaSFU = localLink.trim() !== '';
   */
@@ -64,9 +57,6 @@ const App = () => {
     apiUserName: 'dummyUsr',
     apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
   };
-
-  // If using localhost; you might need your actual local ip address instead of localhost
-  // const localLink = 'http://100.xx.xx.xx:3000';
   const localLink = 'http://your-ce-server.com'; //http://localhost:3000
   const connectMediaSFU = localLink.trim() !== '';
   */
@@ -78,7 +68,6 @@ const App = () => {
     apiUserName: 'yourDevUser', // 8 chars recommended for dummy
     apiKey: 'yourDevApiKey1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef', // 64 chars
   };
-
   const localLink = ''; // Leave empty if not using your own server
   const connectMediaSFU = true; // Set to true if using MediaSFU Cloud since localLink is empty
 
