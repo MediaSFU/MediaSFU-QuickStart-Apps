@@ -13,9 +13,11 @@
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-clipboard/clipboard": "^1.14.3",
     "@react-native-picker/picker": "^2.9.0",
-    "mediasfu-reactnative": "^2.1.1",
+    "mediasfu-reactnative": "^2.3.5",
     "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-native": "0.76.1",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.20.2",
     "react-native-orientation-locker": "^1.7.0",
     "react-native-picker-select": "^9.3.1",
@@ -46,5 +48,22 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "overrides": {
+    "mediasfu-reactnative": {
+      "@react-native-async-storage/async-storage": "^2.0.0",
+      "react": "18.3.1",
+      "react-native": "0.76.1"
+    },
+    "react-native-webrtc-web-shim": {
+      "react-native-web": "0.21.1"
+    },
+    "react-native-web": {
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
+    },
+    "react-dom": {
+      "react": "18.3.1"
+    }
   }
 }
