@@ -400,7 +400,6 @@ const ShowcaseMiniCard: CustomMiniCardType = (props) => {
 // Custom Workspace Component (Reserved for future use)
 // -----------------------------------------------------------------------------
 // Uncomment to enable full custom workspace UI by setting enableFullCustomUI = true
-// @ts-expect-error - Reserved for future use
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CustomWorkspace: CustomComponentType = (props) => {
   const { parameters } = props;

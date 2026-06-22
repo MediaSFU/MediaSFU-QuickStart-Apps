@@ -22,3 +22,12 @@ yarn-error.log*
 
 # Dependencies
 node_modules/
+
+# Generated build outputs
+**/build/
+**/dist/
+**/.gradle/
+**/.kotlin/
+
+# Local maintainer planning notes
+QUICKSTART_APPS_REFRESH_PLAN.md

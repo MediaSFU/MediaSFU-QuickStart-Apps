@@ -1,121 +1,46 @@
-# MediaSFU ReactJS Starter App
+﻿# MediaSFU ReactJS Quick Start
 
-This MediaSFU ReactJS starter application demonstrates how to integrate and use the **MediaSFU** packages effectively within a ReactJS project.
+Create React App starter for building a MediaSFU-powered WebRTC room with `mediasfu-reactjs@4.2.8`.
 
-## Table of Contents
+Use this app when you want a React browser meeting room, webinar room, dashboard embed, education portal, or custom real-time audio/video interface. It starts with the published MediaSFU ReactJS SDK and gives you a working baseline before you add branding, backend hooks, or custom room controls.
 
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [Clone the Repository](#clone-the-repository)
-  - [Install Dependencies](#install-dependencies)
-  - [Run the Application](#run-the-application)
-- [Example Modification](#example-modification)
-- [Troubleshooting](#troubleshooting)
-- [Learn More](#learn-more)
+## What This App Demonstrates
 
-## Prerequisites
+- Installing MediaSFU from the public npm registry instead of a local tarball.
+- Running a ReactJS room with the prebuilt MediaSFU UI.
+- Mapping Create React App environment variables into MediaSFU room parameters.
+- Moving from prebuilt UI to custom prejoin, `uiOverrides`, or no-UI mode.
 
-Before you begin, ensure you have the following installed:
-
-- **[Node.js](https://nodejs.org/)** (v14 or later)
-- **[npm](https://www.npmjs.com/)** (comes with Node.js) or **[Yarn](https://yarnpkg.com/)**
-
-## Getting Started
-
-### Clone the Repository
-
-If you haven't cloned the main repository yet, do so now:
-
-```bash
-git clone https://github.com/MediaSFU/MediaSFU-QuickStart-Apps.git
-cd MediaSFU-QuickStart-Apps/mediasfu_reactjs
-```
-
-### Install Dependencies
-
-Using **npm**:
+## Run
 
 ```bash
 npm install
-```
-
-Or using **Yarn**:
-
-```bash
-yarn install
-```
-
-### Run the Application
-
-Using **npm**:
-
-```bash
 npm start
 ```
 
-Or using **Yarn**:
+Open the local URL printed by CRA, usually `http://localhost:3000`.
 
-```bash
-yarn start
+## Configure
+
+For CRA environment injection, use `REACT_APP_*` names or map the root `.env` values before passing SDK props:
+
+```env
+REACT_APP_MEDIASFU_API_USERNAME=your_api_username
+REACT_APP_MEDIASFU_API_KEY=your_64_character_api_key
+REACT_APP_MEDIASFU_LOCAL_LINK=
+REACT_APP_MEDIASFU_CONNECT_MEDIASFU=true
 ```
 
-The application should now be running at `http://localhost:3000`.
+Connection modes match the root README:
 
-## Example Modification
+- Cloud only: real credentials, empty local link, `connectMediaSFU=true`.
+- Self-hosted CE only: CE URL, `connectMediaSFU=false`.
+- CE plus Cloud egress: CE URL, dummy client credentials, backend keeps real credentials.
 
-This starter app demonstrates how to integrate MediaSFU packages within a React.js application. Follow the steps below to modify:
+## UI Paths
 
-1. **Primary File of Interest**
+Start with `ModernMediasfuGeneric` or `MediasfuGeneric` prebuilt UI. After the room flow works, try custom prejoin, `uiOverrides`, backend create/join hooks, or `returnUI=false` with source parameters for a fully custom workspace.
 
-   The primary file you'll be working with is `App.js`, located in the `src` folder. In `App.js`, you can customize the app to render various views or enable specific modes based on your development needs. This example assumes you do not yet have your API credentials and will prompt you to scan/enter your meeting details after creating one on the MediaSFU frontend. However, if you do have your credentials, you can configure them as follows:
+## Notes
 
-   - **Update Credentials**: Locate the following line in `App.js`:
-     ```javascript
-     const credentials = { apiUserName: 'your_api_username', apiKey: 'your_api_key' };
-     ```
-     Replace `'your_api_username'` and `'your_api_key'` with your actual credentials. This will allow the application to `programmatically make requests to MediaSFU to create/join rooms` (which is the ideal approach).
-
-   - **Rendering Options**: You can configure different render modes:
-     ```javascript
-     // Uses a pre-join page that requires users to enter credentials
-     return <MediasfuGeneric PrejoinPage={PreJoinPage} credentials={credentials} />;
-     ```
-   
-   You have the flexibility to use:
-   
-   - **Prejoin Page with Credentials**: Configure and use MediaSFU with authenticated access, ideal for production-ready setups.
-   - **Local UI Development Mode**: Experiment with MediaSFU components locally without the need for pre-configuration, useful for testing and UI development.
-
-2. **Configuration**
-
-   Ensure any necessary credentials or settings are configured based on the [MediaSFU Documentation](https://github.com/MediaSFU/MediaSFU-ReactJS) to enable full functionality of the MediaSFU components.
-
-
-## Troubleshooting
-
-- **Port Already in Use**
-
-  If port `3000` is already in use, you can specify a different port:
-
-  ```bash
-  PORT=3001 npm start
-  ```
-
-- **Dependency Issues**
-
-  If you encounter issues during installation, try deleting `node_modules` and reinstalling:
-
-  ```bash
-  rm -rf node_modules
-  npm install
-  ```
-
-## Learn More
-
-- **[React Documentation](https://reactjs.org/)**
-- **[MediaSFU Documentation](https://www.mediasfu.com/documentation/)**
-- **[Create React App](https://create-react-app.dev/)**
-
----
-
-*Happy Coding with React.js and MediaSFU! 🎉*
+The app now uses the registry package instead of a local SDK tarball. For local SDK development, temporarily point `mediasfu-reactjs` at your packed tarball and do not commit that local path.

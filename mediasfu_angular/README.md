@@ -1,122 +1,44 @@
-This Angular starter application demonstrates how to integrate and use the **MediaSFU** packages within an Angular project, providing a robust framework for building dynamic web applications.
+﻿# MediaSFU Angular Quick Start
 
-## Table of Contents
+Angular starter for building a MediaSFU-powered WebRTC room with `mediasfu-angular@2.2.5`.
 
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [Clone the Repository](#clone-the-repository)
-  - [Install Dependencies](#install-dependencies)
-  - [Run the Application](#run-the-application)
-- [Example Modification](#example-modification)
-- [Troubleshooting](#troubleshooting)
-- [Learn More](#learn-more)
+Use this app when your product already lives in Angular and you want a working video meeting room, webinar experience, support workflow, or enterprise collaboration page without leaving Angular conventions.
 
-## Prerequisites
+## What This App Demonstrates
 
-Before you begin, ensure you have the following installed:
+- Installing the published MediaSFU Angular SDK from npm.
+- Running a MediaSFU room inside an Angular app.
+- Mapping Angular environment values into SDK configuration.
+- Extending from prebuilt components toward backend hooks or custom UI.
 
-- **[Node.js](https://nodejs.org/)** (v14 or later)
-- **[npm](https://www.npmjs.com/)** (comes with Node.js) or **[Yarn](https://yarnpkg.com/)**
-- **[Angular CLI](https://angular.io/cli)**
-
-## Getting Started
-
-### Clone the Repository
-
-If you haven't cloned the main repository yet, do so now:
-
-```bash
-git clone https://github.com/MediaSFU/MediaSFU-QuickStart-Apps.git
-cd MediaSFU-QuickStart-Apps/mediasfu_angular
-```
-
-### Install Dependencies
-
-Using **npm**:
+## Run
 
 ```bash
 npm install
+npm start
 ```
 
-Or using **Yarn**:
+The Angular dev server usually opens at `http://localhost:4200`.
 
-```bash
-yarn install
+## Configure
+
+Use Angular environment files or an injected runtime config service to map the shared MediaSFU settings:
+
+```ts
+export const environment = {
+  mediasfuApiUsername: 'your_api_username',
+  mediasfuApiKey: 'your_64_character_api_key',
+  mediasfuLocalLink: '',
+  mediasfuConnectMediaSFU: true,
+};
 ```
 
-### Run the Application
+## Connection Modes
 
-Start the development server:
+- Cloud only: real credentials, empty local link, `connectMediaSFU=true`.
+- Self-hosted CE only: CE URL, `connectMediaSFU=false`.
+- CE plus Cloud egress: CE URL, dummy client credentials, backend keeps real credentials.
 
-```bash
-ng serve
-```
+## UI Paths
 
-Navigate to `http://localhost:4200/` in your web browser. The application will automatically reload if you change any of the source files.
-
-## Example Modification
-
-This starter app demonstrates how to integrate MediaSFU packages within an Angular environment. Follow the steps below to modify:
-
-1. **Primary File of Interest**
-
-   The primary file you'll be working with is `AppComponent (app.component.ts)`, located in the `src/app` folder. In `AppComponent`, you can customize the app to render various views or enable specific modes based on your development needs. This example assumes you do not yet have your API credentials and will prompt you to scan or enter your meeting details after creating one on the MediaSFU frontend. However, if you do have your credentials, you can configure them as follows:
-
-   - **Update Credentials**: Locate and add your credentials within the `AppComponent` or the service managing MediaSFU requests:
-     ```typescript
-     const credentials = { apiUserName: 'your_api_username', apiKey: 'your_api_key' };
-     ```
-     Replace `'your_api_username'` and `'your_api_key'` with your actual credentials. This will allow the application to `programmatically make requests to MediaSFU to create or join rooms` (the ideal approach).
-
-   - **Rendering Options**: You can configure different render modes directly in `AppComponent`’s template:
-     ```html
-     <!-- Uses a pre-join page that requires users to enter credentials -->
-     <app-mediasfu-generic [PrejoinPage]="PreJoinPage" [credentials]="credentials"></app-mediasfu-generic>
-     ```
-
-   You have the flexibility to use:
-   
-   - **Prejoin Page with Credentials**: Configure and use MediaSFU with authenticated access, ideal for production-ready setups.
-   - **Local UI Development Mode**: Experiment with MediaSFU components locally without the need for pre-configuration, useful for testing and UI development.
-
-2. **Configuration**
-
-   Ensure any necessary credentials or settings are configured based on the [MediaSFU Documentation](https://github.com/MediaSFU/MediaSFU-Angular) to enable full functionality of the MediaSFU components.
-
-## Troubleshooting
-
-- **Angular CLI Not Found**
-
-  If you encounter an error related to Angular CLI, install it globally:
-
-  ```bash
-  npm install -g @angular/cli
-  ```
-
-- **Dependency Issues**
-
-  If you encounter issues during installation, try deleting `node_modules` and reinstalling:
-
-  ```bash
-  rm -rf node_modules
-  npm install
-  ```
-
-- **Port Already in Use**
-
-  If port `4200` is already in use, specify a different port:
-
-  ```bash
-  ng serve --port 4300
-  ```
-
-## Learn More
-
-- **[Angular Documentation](https://angular.io/docs)**
-- **[MediaSFU Documentation](https://mediasfu-docs.com/)**
-- **[Angular CLI](https://angular.io/cli)**
-- **[Angular Material](https://material.angular.io/)** (if applicable)
-
----
-
-*Happy Coding with Angular and MediaSFU! 🚀🌐*
+Begin with the prebuilt Angular MediaSFU components. Then add custom component overrides, backend create/join hooks, or no-UI/source-parameter flows when the app needs a fully custom experience.
