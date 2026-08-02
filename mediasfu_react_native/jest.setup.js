@@ -10,10 +10,3 @@ jest.mock('react-native-reanimated', () => ({
   withTiming: jest.fn((value) => value),
   runOnJS: jest.fn((fn) => fn),
 }));
-
-jest.mock('react-native-orientation-locker', () => ({
-  lockToPortrait: jest.fn(),
-  unlockAllOrientations: jest.fn(),
-  addOrientationListener: jest.fn(),
-  removeOrientationListener: jest.fn(),
-}));

@@ -109,8 +109,8 @@ These versions were checked against the public package registries before the qui
 | ReactJS | `mediasfu-reactjs` | `4.2.8` | `npm install`, `npm run build` |
 | Angular | `mediasfu-angular` | `2.2.5` | `npm install`, `npm run build` |
 | Vue | `mediasfu-vue` | `1.0.5` | `npm install`, `npm run build` |
-| React Native CLI | `mediasfu-reactnative` | `2.3.6` | `npm install`, `npm test`, `npm run lint` |
-| React Native Expo | `mediasfu-reactnative-expo` | `2.4.1` | `npm install`, `npx expo-doctor` |
+| React Native CLI | `mediasfu-reactnative` | `2.3.7` | `npm install`, `npm test`, `npm run lint` |
+| React Native Expo | `mediasfu-reactnative-expo` | `2.4.2` | `npm install`, `npx expo-doctor` |
 | Flutter | `mediasfu_sdk` | `2.2.8` | `flutter pub get`, `flutter analyze`, `flutter test` |
 | Kotlin/Android | `com.mediasfu:mediasfu-sdk-android` | `1.0.3` | `./gradlew :app:assembleDebug` |
 | Kotlin Multiplatform | `com.mediasfu:mediasfu-sdk` | `1.0.3` | Reference for KMP/iOS bridge work |

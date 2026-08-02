@@ -1,6 +1,6 @@
 ﻿# MediaSFU React Native Expo Quick Start
 
-Expo starter for building a MediaSFU-powered mobile room with `mediasfu-reactnative-expo@2.4.1` on the Expo SDK 54 / React 19 line.
+Expo starter for building a MediaSFU-powered mobile room with `mediasfu-reactnative-expo@2.4.2` on the Expo SDK 57 / React Native 0.86 line.
 
 Use this app when you want an Expo-first path to a video meeting room, mobile event app, remote support app, or prototype that can graduate into an Expo dev client or native build when WebRTC features require native modules.
 
@@ -43,4 +43,4 @@ Start with the prebuilt Expo SDK room UI. Use custom prejoin, backend hooks, `ui
 
 ## Dependency Notes
 
-The dependency tree is aligned with Expo SDK 54 and React 19. If you upgrade Expo, rerun `npx expo-doctor` and check the native WebRTC packages before shipping a build.
+The dependency tree is aligned with Expo SDK 57, React 19.2, React Native 0.86, and React Native WebRTC 124.0.8. Native WebRTC flows require a development build or native build; run `npx expo-doctor` after dependency changes.

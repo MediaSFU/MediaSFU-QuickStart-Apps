@@ -1,6 +1,6 @@
 ﻿# MediaSFU React Native CLI Quick Start
 
-React Native CLI starter for building a native mobile MediaSFU room with `mediasfu-reactnative@2.3.6`.
+React Native CLI starter for building a native mobile MediaSFU room with `mediasfu-reactnative@2.3.7`.
 
 Use this app when you need direct Android/iOS project control for a mobile video meeting app, telehealth flow, creator app, field-service workflow, or branded real-time communication product.
 
@@ -50,3 +50,7 @@ Restart Metro with `npm start -- --reset-cache` after changing env values.
 ## UI Paths
 
 Start with the SDK prebuilt UI. Then add custom prejoin, backend create/join hooks, `uiOverrides`, or `returnUI=false` plus source parameters for a native custom UI.
+
+## Compatibility
+
+This starter follows the SDK 2.3.7 peer range: React 19.2, React Native 0.86, React Native WebRTC 124.0.8, Reanimated 4.5, and Worklets 0.11. Use a clean native rebuild after changing these versions.

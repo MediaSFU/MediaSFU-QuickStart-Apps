@@ -1,5 +1,15 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
+
+def autolinkingDir = file("build/generated/autolinking")
+def autolinkingJson = new File(autolinkingDir, "autolinking.json")
+if (autolinkingJson.exists()) {
+	def currentRootPath = rootDir.parentFile.canonicalPath.replace(File.separator, "/")
+	if (!autolinkingJson.text.contains(currentRootPath)) {
+		autolinkingDir.deleteDir()
+	}
+}
+
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 rootProject.name = 'mediasfu_react_native'
 include ':app'

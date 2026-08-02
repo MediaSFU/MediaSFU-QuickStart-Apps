@@ -1,20 +1,13 @@
 import { useState } from 'react';
-import { CreateMediaSFURoomOptions, createRoomOnMediaSFU, JoinMediaSFURoomOptions, joinRoomOnMediaSFU, MediasfuGeneric } from 'mediasfu-reactnative-expo';
-
-// Import specific Mediasfu view components
-import { MediasfuBroadcast } from 'mediasfu-reactnative-expo';
-import { MediasfuChat } from 'mediasfu-reactnative-expo';
-import { MediasfuWebinar } from 'mediasfu-reactnative-expo';
-import { MediasfuConference } from 'mediasfu-reactnative-expo';
-
-// Import the PreJoinPage component for the Pre-Join Page use case
-import { PreJoinPage, PreJoinPageOptions } from 'mediasfu-reactnative-expo';
-
-// Import methods for generating random participants, messages, requests, and waiting room lists if using seed data
-import { generateRandomParticipants } from 'mediasfu-reactnative-expo';
-import { generateRandomMessages } from 'mediasfu-reactnative-expo';
-import { generateRandomRequestList } from 'mediasfu-reactnative-expo';
-import { generateRandomWaitingRoomList } from 'mediasfu-reactnative-expo';
+import {
+  CreateMediaSFURoomOptions,
+  createRoomOnMediaSFU,
+  JoinMediaSFURoomOptions,
+  joinRoomOnMediaSFU,
+  MediasfuGeneric,
+  PreJoinPage,
+  PreJoinPageOptions,
+} from 'mediasfu-reactnative-expo';
 
 
 
