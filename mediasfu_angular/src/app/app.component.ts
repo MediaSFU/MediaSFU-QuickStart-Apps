@@ -31,8 +31,6 @@ import {
   MediasfuChat,
   MediasfuUICustomOverrides,
   PreJoinPage,
-  CreateRoomOnMediaSFU,
-  JoinRoomOnMediaSFU,
   CreateMediaSFURoomOptions,
   JoinMediaSFURoomOptions,
   // Import components for custom overrides
@@ -44,6 +42,7 @@ import {
   MenuModal,
   ConfirmExitModal,
 } from 'mediasfu-angular';
+import { createRoomViaBackend, joinRoomViaBackend } from './room-backend';
 
 // =============================================================================
 // CUSTOM COMPONENTS - Enhanced UI components with custom styling
@@ -668,28 +667,18 @@ const modalOverrideMode: ModalOverrideMode = 'component'; // Switch to 'render' 
 
 // Connection Presets
 const connectionPresets: Record<ConnectionScenario, {
-  credentials?: { apiUserName: string; apiKey: string };
   localLink: string;
   connectMediaSFU: boolean;
 }> = {
   cloud: {
-    credentials: {
-      apiUserName: 'dummyUsr',
-      apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-    },
     localLink: '',
     connectMediaSFU: true,
   },
   hybrid: {
-    credentials: {
-      apiUserName: 'dummyUsr',
-      apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-    },
     localLink: 'http://localhost:3000',
     connectMediaSFU: true,
   },
   ce: {
-    credentials: undefined,
     localLink: 'http://localhost:3000',
     connectMediaSFU: false,
   },
@@ -718,7 +707,6 @@ const connectionPresets: Record<ConnectionScenario, {
         [PrejoinPage]="preJoinRenderer"
         [localLink]="preset.localLink"
         [connectMediaSFU]="preset.connectMediaSFU"
-        [credentials]="preset.credentials!"
         [returnUI]="returnUI"
         [noUIPreJoinOptions]="noUIPreJoinOptions"
         [customVideoCard]="cardOverrides.customVideoCard"
@@ -726,8 +714,8 @@ const connectionPresets: Record<ConnectionScenario, {
         [customMiniCard]="cardOverrides.customMiniCard"
         [containerStyle]="containerStyle"
         [uiOverrides]="uiOverrides"
-        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomOnMediaSFU.createRoomOnMediaSFU : undefined"
-        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomOnMediaSFU.joinRoomOnMediaSFU : undefined">
+        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomViaBackend : undefined"
+        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomViaBackend : undefined">
       </app-mediasfu-generic>
 
       <!-- Broadcast Experience -->
@@ -736,7 +724,6 @@ const connectionPresets: Record<ConnectionScenario, {
         [PrejoinPage]="preJoinRenderer"
         [localLink]="preset.localLink"
         [connectMediaSFU]="preset.connectMediaSFU"
-        [credentials]="preset.credentials!"
         [returnUI]="returnUI"
         [noUIPreJoinOptions]="noUIPreJoinOptions"
         [customVideoCard]="cardOverrides.customVideoCard"
@@ -744,8 +731,8 @@ const connectionPresets: Record<ConnectionScenario, {
         [customMiniCard]="cardOverrides.customMiniCard"
         [containerStyle]="containerStyle"
         [uiOverrides]="uiOverrides"
-        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomOnMediaSFU.createRoomOnMediaSFU : undefined"
-        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomOnMediaSFU.joinRoomOnMediaSFU : undefined">
+        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomViaBackend : undefined"
+        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomViaBackend : undefined">
       </app-mediasfu-broadcast>
 
       <!-- Conference Experience -->
@@ -754,7 +741,6 @@ const connectionPresets: Record<ConnectionScenario, {
         [PrejoinPage]="preJoinRenderer"
         [localLink]="preset.localLink"
         [connectMediaSFU]="preset.connectMediaSFU"
-        [credentials]="preset.credentials!"
         [returnUI]="returnUI"
         [noUIPreJoinOptions]="noUIPreJoinOptions"
         [customVideoCard]="cardOverrides.customVideoCard"
@@ -762,8 +748,8 @@ const connectionPresets: Record<ConnectionScenario, {
         [customMiniCard]="cardOverrides.customMiniCard"
         [containerStyle]="containerStyle"
         [uiOverrides]="uiOverrides"
-        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomOnMediaSFU.createRoomOnMediaSFU : undefined"
-        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomOnMediaSFU.joinRoomOnMediaSFU : undefined">
+        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomViaBackend : undefined"
+        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomViaBackend : undefined">
       </app-mediasfu-conference>
 
       <!-- Webinar Experience -->
@@ -772,7 +758,6 @@ const connectionPresets: Record<ConnectionScenario, {
         [PrejoinPage]="preJoinRenderer"
         [localLink]="preset.localLink"
         [connectMediaSFU]="preset.connectMediaSFU"
-        [credentials]="preset.credentials!"
         [returnUI]="returnUI"
         [noUIPreJoinOptions]="noUIPreJoinOptions"
         [customVideoCard]="cardOverrides.customVideoCard"
@@ -780,8 +765,8 @@ const connectionPresets: Record<ConnectionScenario, {
         [customMiniCard]="cardOverrides.customMiniCard"
         [containerStyle]="containerStyle"
         [uiOverrides]="uiOverrides"
-        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomOnMediaSFU.createRoomOnMediaSFU : undefined"
-        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomOnMediaSFU.joinRoomOnMediaSFU : undefined">
+        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomViaBackend : undefined"
+        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomViaBackend : undefined">
       </app-mediasfu-webinar>
 
       <!-- Chat Experience -->
@@ -790,7 +775,6 @@ const connectionPresets: Record<ConnectionScenario, {
         [PrejoinPage]="preJoinRenderer"
         [localLink]="preset.localLink"
         [connectMediaSFU]="preset.connectMediaSFU"
-        [credentials]="preset.credentials!"
         [returnUI]="returnUI"
         [noUIPreJoinOptions]="noUIPreJoinOptions"
         [customVideoCard]="cardOverrides.customVideoCard"
@@ -798,8 +782,8 @@ const connectionPresets: Record<ConnectionScenario, {
         [customMiniCard]="cardOverrides.customMiniCard"
         [containerStyle]="containerStyle"
         [uiOverrides]="uiOverrides"
-        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomOnMediaSFU.createRoomOnMediaSFU : undefined"
-        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomOnMediaSFU.joinRoomOnMediaSFU : undefined">
+        [createMediaSFURoom]="enableBackendProxyHooks ? createRoomViaBackend : undefined"
+        [joinMediaSFURoom]="enableBackendProxyHooks ? joinRoomViaBackend : undefined">
       </app-mediasfu-chat>
     </div>
   `,
@@ -817,6 +801,8 @@ export class AppUniqueComponent implements OnInit {
   preset = connectionPresets[connectionScenario];
   returnUI = !enableFullCustomUI && showPrebuiltUI;
   enableBackendProxyHooks = enableBackendProxyHooks;
+  readonly createRoomViaBackend = createRoomViaBackend;
+  readonly joinRoomViaBackend = joinRoomViaBackend;
 
   // No UI Pre-join options (auto-join without prejoin page)
   noUIPreJoinOptions: CreateMediaSFURoomOptions | JoinMediaSFURoomOptions | undefined = enableNoUIPreJoin
@@ -847,11 +833,6 @@ export class AppUniqueComponent implements OnInit {
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
       }
     : undefined;
-
-  constructor(
-    public createRoomOnMediaSFU: CreateRoomOnMediaSFU,
-    public joinRoomOnMediaSFU: JoinRoomOnMediaSFU
-  ) {}
 
   ngOnInit(): void {
     // Component initialization logic can go here

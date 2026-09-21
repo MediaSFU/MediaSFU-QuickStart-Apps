@@ -8,7 +8,7 @@ Use this app when you want a native Android video meeting room, mobile support f
 
 - Installing MediaSFU Android artifacts from Maven Central.
 - Running a minimal Android Compose room with `MediasfuGeneric`.
-- Passing MediaSFU settings with Gradle properties or environment variables.
+- Routing create and join through an authenticated application backend.
 - Validating the Android SDK path before building a fully custom Compose UI.
 
 ## Requirements
@@ -26,22 +26,9 @@ implementation("com.mediasfu:mediasfu-sdk-android:1.0.3")
 implementation("com.mediasfu:mediasoup-client:1.0.2")
 ```
 
-## Configure
+## Configure secure room access
 
-You can pass the same root environment values as Gradle properties or process environment variables:
-
-```bash
-MEDIASFU_API_USERNAME=your_api_username
-MEDIASFU_API_KEY=your_64_character_api_key
-MEDIASFU_LOCAL_LINK=
-MEDIASFU_CONNECT_MEDIASFU=true
-```
-
-For local Gradle properties, create `local.properties` or pass `-P` values:
-
-```bash
-./gradlew :app:assembleDebug -PMEDIASFU_API_USERNAME=your_api_username -PMEDIASFU_API_KEY=your_64_character_api_key
-```
+Set `MEDIASFU_BACKEND_BASE_URL` in `app/build.gradle.kts` to the application's HTTPS backend and attach the signed-in application's short-lived session in `RoomBackend.kt`. MediaSFU credentials never belong in Gradle properties, BuildConfig, the APK, or the AAB. Follow [Secure room setup](./SECURE_ROOM_SETUP.md) for the exact endpoints, observable result, failure cases, teardown, and release checklist.
 
 ## Run
 
@@ -54,9 +41,3 @@ Open this folder in Android Studio and run the `app` configuration, or build fro
 ## Usage Notes
 
 The app mounts `MediasfuGeneric` directly. Start here to validate room connectivity, then move custom controls into your own Compose UI once the default room flow is working.
-
-Connection modes match the rest of this repo:
-
-- Cloud only: real credentials, empty `MEDIASFU_LOCAL_LINK`, `MEDIASFU_CONNECT_MEDIASFU=true`.
-- Self-hosted CE only: CE server URL, `MEDIASFU_CONNECT_MEDIASFU=false`.
-- CE plus Cloud egress: CE server URL, dummy client credentials, real credentials on your backend.

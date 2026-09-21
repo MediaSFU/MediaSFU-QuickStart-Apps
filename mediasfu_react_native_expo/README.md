@@ -1,14 +1,15 @@
 ﻿# MediaSFU React Native Expo Quick Start
 
-Expo starter for building a MediaSFU-powered mobile room with `mediasfu-reactnative-expo@2.4.2` on the Expo SDK 57 / React Native 0.86 line.
+Expo starter for building a MediaSFU-powered mobile room with `mediasfu-reactnative-expo@2.5.4` on the Expo SDK 57 / React Native 0.86 line.
 
 Use this app when you want an Expo-first path to a video meeting room, mobile event app, remote support app, or prototype that can graduate into an Expo dev client or native build when WebRTC features require native modules.
 
 ## What This App Demonstrates
 
 - Installing the Expo-compatible MediaSFU React Native SDK from npm.
+- Starting from `ModernMediasfuGeneric`, the current full-room experience.
 - Running the app through the Expo CLI.
-- Mapping `EXPO_PUBLIC_MEDIASFU_*` variables into room settings.
+- Routing create and join through an authenticated application backend.
 - Understanding when Expo Go is enough and when a dev client or native build is required.
 
 ## Run
@@ -20,26 +21,21 @@ npm start
 
 Then choose Android, iOS, or web from the Expo CLI. Native WebRTC flows generally require a dev client or native build, not plain Expo Go.
 
-## Configure
+## Configure secure room access
 
-Use Expo public variables or app config:
-
-```env
-EXPO_PUBLIC_MEDIASFU_API_USERNAME=your_api_username
-EXPO_PUBLIC_MEDIASFU_API_KEY=your_64_character_api_key
-EXPO_PUBLIC_MEDIASFU_LOCAL_LINK=
-EXPO_PUBLIC_MEDIASFU_CONNECT_MEDIASFU=true
-```
-
-## Connection Modes
-
-- Cloud only: real credentials, empty local link, `connectMediaSFU=true`.
-- Self-hosted CE only: CE URL, `connectMediaSFU=false`.
-- CE plus Cloud egress: CE URL, dummy client credentials, backend keeps real credentials.
+Set the HTTPS application-backend URL in `roomBackend.ts` and attach the signed-in application's short-lived session in its networking layer. MediaSFU credentials never belong in Expo public configuration. Follow [Secure room setup](./SECURE_ROOM_SETUP.md) for the exact endpoints, observable result, failure cases, teardown, and release checklist.
 
 ## UI Paths
 
-Start with the prebuilt Expo SDK room UI. Use custom prejoin, backend hooks, `uiOverrides`, or `returnUI=false` after the default room flow is stable.
+Start with `ModernMediasfuGeneric`, the prebuilt Expo SDK room UI used by this
+starter. Use custom prejoin, backend hooks, `uiOverrides`, or `returnUI=false`
+after the default room flow is stable. Follow the published SDK's headless
+guide when building a custom room interface.
+
+Expo Web is useful for layout, prejoin, backend-proxy, and browser WebRTC
+acceptance. It does not prove Android/iOS camera capture, audio routing,
+background behavior, or native teardown. Use an Expo development build on an
+emulator/device for those release checks.
 
 ## Dependency Notes
 

@@ -1,10 +1,7 @@
 // ignore_for_file: unused_shown_name, unused_import, dead_code, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:mediasfu_sdk/mediasfu_sdk.dart';
-
-// Import modern components
-import 'package:mediasfu_sdk/components_modern/components_modern.dart';
-import 'package:mediasfu_sdk/components_modern/mediasfu_components/modern_mediasfu_generic.dart';
+import 'room_backend.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +14,6 @@ void main() {
 /// **Note:** Ensure this widget is passed to [ModernMediasfuGenericOptions] only when you intend to use a custom pre-join page.
 Widget myCustomPreJoinPage({
   PreJoinPageOptions? options,
-  required Credentials credentials,
 }) {
   return Scaffold(
     appBar: AppBar(
@@ -29,7 +25,7 @@ Widget myCustomPreJoinPage({
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Hello, ${credentials.apiUserName}!',
+            'Welcome!',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
@@ -55,8 +51,7 @@ Widget myCustomPreJoinPage({
 
 /// The main application widget for MediaSFU Modern UI.
 ///
-/// This widget initializes the necessary credentials and configuration for the MediaSFU application
-/// using the Modern UI components with glassmorphic design.
+/// This widget initializes the MediaSFU application using the Modern UI.
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -103,46 +98,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // =========================================================
-    //                API CREDENTIALS CONFIGURATION
-    // =========================================================
-
-    /**
-     * Scenario A: Not using MediaSFU Cloud at all.
-     * - Dummy credentials are needed to render PreJoinPage.
-     */
-    /*
-    final credentials = Credentials(
-      apiUserName: 'dummyUsr',
-      apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-    );
-    final localLink = 'http://your-ce-server.com';
-    final connectMediaSFU = false;
-    */
-
-    /**
-     * Scenario B: Using MediaSFU CE + MediaSFU Cloud for Egress only.
-     */
-    /*
-    final credentials = Credentials(
-      apiUserName: 'dummyUsr',
-      apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-    );
-    final localLink = 'http://your-ce-server.com';
-    final connectMediaSFU = true;
-    */
-
-    /**
-     * Scenario C: Using MediaSFU Cloud without your own server.
-     */
-    final credentials = Credentials(
-      apiUserName: 'yourDevUser', // 8 chars recommended for dummy
-      apiKey:
-          'yourDevApiKey1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdeg', // 64 chars
-    );
-    const localLink =
-        'http://192.168.1.133:3000/'; // Leave empty if not using your own server
-    const connectMediaSFU =
-        false; // Set to true if using MediaSFU Cloud since localLink is empty
+    // Room authority stays on the application backend.
+    const localLink = '';
+    const connectMediaSFU = true;
 
     // =========================================================
     //                    UI RENDERING OPTIONS
@@ -179,8 +137,6 @@ class _MyAppState extends State<MyApp> {
     // Basic Modern MediaSFU configuration
     // When preJoinPageWidget is not provided, the default PreJoinPage is used internally
     final options = ModernMediasfuGenericOptions(
-      // Pass your Credentials if you will be using MediaSFU Cloud
-      credentials: credentials,
       connectMediaSFU: connectMediaSFU,
 
       // Modern UI specific options:
@@ -197,8 +153,8 @@ class _MyAppState extends State<MyApp> {
       noUIPreJoinOptionsCreate: !returnUI ? noUIPreJoinOptionsCreate : null,
 
       // Provide custom room functions
-      // createMediaSFURoom: createRoomOnMediaSFU,
-      // joinMediaSFURoom: joinRoomOnMediaSFU,
+      createMediaSFURoom: createRoomViaBackend,
+      joinMediaSFURoom: joinRoomViaBackend,
     );
 
     /*
@@ -207,10 +163,8 @@ class _MyAppState extends State<MyApp> {
       preJoinPageWidget: ({PreJoinPageOptions? options}) {
         return myCustomPreJoinPage(
           options: options,
-          credentials: credentials,
         );
       },
-      credentials: credentials,
       connectMediaSFU: connectMediaSFU,
     );
     */
@@ -219,7 +173,6 @@ class _MyAppState extends State<MyApp> {
     // Example with seed data for testing
     final optionsWithSeed = ModernMediasfuGenericOptions(
       preJoinPageWidget: PreJoinPage(),
-      credentials: credentials,
       connectMediaSFU: connectMediaSFU,
       useSeed: true,
       seedData: SeedData(
@@ -258,10 +211,9 @@ class _MyAppState extends State<MyApp> {
     // Example with custom room functions
     final optionsWithCustomFunctions = ModernMediasfuGenericOptions(
       preJoinPageWidget: PreJoinPage(),
-      credentials: credentials,
       connectMediaSFU: connectMediaSFU,
-      createMediaSFURoom: createRoomOnMediaSFU,
-      joinMediaSFURoom: joinRoomOnMediaSFU,
+      createMediaSFURoom: createRoomViaBackend,
+      joinMediaSFURoom: joinRoomViaBackend,
     );
     */
 
@@ -269,7 +221,6 @@ class _MyAppState extends State<MyApp> {
     // Example with returnUI = false for custom UI
     final optionsNoUI = ModernMediasfuGenericOptions(
       preJoinPageWidget: PreJoinPage(),
-      credentials: credentials,
       connectMediaSFU: connectMediaSFU,
       returnUI: false,
       noUIPreJoinOptions: noUIPreJoinOptionsCreate,

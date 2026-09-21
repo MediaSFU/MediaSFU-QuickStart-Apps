@@ -175,8 +175,8 @@ const selectedDemo = computed(() => demos.find((demo) => demo.id === selectedId.
  * MediaSFU Component Configuration and Usage Guide
  *
  * The following code and comments will guide you through:
- * 1. Configuring the MediaSFU component with different server and credential setups.
- * 2. Handling API credentials securely depending on whether you use MediaSFU Cloud or your own MediaSFU CE server.
+ * 1. Configuring the MediaSFU component for supported deployment modes.
+ * 2. Routing create and join through the application backend.
  * 3. Rendering custom UIs by disabling the default MediaSFU UI.
  * 4. Using custom "create room" and "join room" functions for secure, flexible integration.
  *
@@ -198,15 +198,14 @@ import type { MediasfuUICustomOverrides } from 'mediasfu-vue'
 // Pre-Join Page component (if you choose to use it)
 import { PreJoinPage } from 'mediasfu-vue'
 
-// Import custom "create" and "join" room functions
-import { createRoomOnMediaSFU, joinRoomOnMediaSFU } from 'mediasfu-vue'
 import type { CreateMediaSFURoomOptions, JoinMediaSFURoomOptions } from 'mediasfu-vue'
+import { createRoomViaBackend, joinRoomViaBackend } from './roomBackend'
 
 /**
  * App Component
  *
  * This component demonstrates how to:
- * - Configure credentials for MediaSFU Cloud and/or Community Edition (CE).
+ * - Configure backend-mediated room access for MediaSFU Cloud or Community Edition.
  * - Use MediaSFU with or without a custom server.
  * - Integrate a pre-join page.
  * - Return no UI and manage state through sourceParameters, allowing a fully custom frontend.
@@ -214,45 +213,14 @@ import type { CreateMediaSFURoomOptions, JoinMediaSFURoomOptions } from 'mediasf
  * Basic instructions:
  * 1. Set `localLink` to your CE server if you have one, or leave it blank to use MediaSFU Cloud.
  * 2. Set `connectMediaSFU` to determine whether you're connecting to MediaSFU Cloud services.
- * 3. Provide credentials if using MediaSFU Cloud (dummy credentials are acceptable in certain scenarios).
+ * 3. Provide the create and join callbacks from this starter.
  * 4. If you prefer a custom UI, set `returnUI` to false and handle all interactions via `sourceParameters` and `updateSourceParameters`.
- * 5. For secure production usage, consider using custom `createMediaSFURoom` and `joinMediaSFURoom` functions to forward requests through your backend.
+ * 5. Use the supplied `createMediaSFURoom` and `joinMediaSFURoom` callbacks.
  */
 
-// =========================================================
-//                API CREDENTIALS CONFIGURATION
-// =========================================================
-//
-// Scenario A: Not using MediaSFU Cloud at all.
-// - No credentials needed. Just set localLink to your CE server.
-// Example:
-/*
-const credentials = {};
-const localLink = 'http://your-ce-server.com'; //http://localhost:3000
-const connectMediaSFU = localLink.trim() !== '';
-*/
-
-// Scenario B: Using MediaSFU CE + MediaSFU Cloud for Egress only.
-// - Use dummy credentials (8 chars for userName, 64 chars for apiKey).
-// - Your CE backend will forward requests with your real credentials.
-/*
-const credentials = {
-  apiUserName: 'dummyUsr',
-  apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-};
-const localLink = 'http://your-ce-server.com'; //http://localhost:3000
-const connectMediaSFU = localLink.trim() !== '';
-*/
-
-// Scenario C: Using MediaSFU Cloud without your own server.
-// - For development, use your actual or dummy credentials.
-// - In production, securely handle credentials server-side and use custom room functions.
-const credentials = {
-  apiUserName: 'dummyUsr',
-  apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-}
-const localLink = '' // Leave empty if not using your own server
-const connectMediaSFU = true // Set to true if using MediaSFU Cloud since localLink is empty
+// Create and join requests are authorized by your application backend.
+const localLink = ''
+const connectMediaSFU = true
 
 // =========================================================
 //                    UI RENDERING OPTIONS
@@ -307,11 +275,9 @@ const uiOverrides = computed<MediasfuUICustomOverrides>(() => ({
 // - Implement custom `createMediaSFURoom` and `joinMediaSFURoom` functions.
 // - These functions send requests to your server, which then communicates with MediaSFU Cloud.
 //
-// Already imported `createRoomOnMediaSFU` and `joinRoomOnMediaSFU` are examples.
+// This starter imports `createRoomViaBackend` and `joinRoomViaBackend`.
 //
-// If using MediaSFU CE backend, ensure your server endpoints:
-// - Validate dummy credentials.
-// - Forward requests to mediasfu.com with real credentials.
+// The backend authenticates the user, validates the payload, and owns MediaSFU credentials.
 
 // =========================================================
 //              CUSTOM CARD COMPONENTS (OPTIONAL)
@@ -636,7 +602,7 @@ const CustomMiniCard: Component = {
     If `returnUI` is false, `noUIPreJoinOptions` is used as a substitute.
     You can also use `sourceParameters` to interact with MediaSFU functionalities directly.
     Avoid using `useLocalUIMode` or `useSeed` in new implementations.
-    Ensure that real credentials are not exposed in the frontend.
+    Room authorization is handled by the application backend.
     Use HTTPS and secure backend endpoints for production.
   -->
 
@@ -652,7 +618,6 @@ const CustomMiniCard: Component = {
   <!-- 
   <MediasfuGeneric
     :PrejoinPage="PreJoinPage"
-    :credentials="credentials"
     :localLink="localLink"
     :connectMediaSFU="connectMediaSFU"
   />
@@ -662,7 +627,6 @@ const CustomMiniCard: Component = {
   <!-- 
   <MediasfuGeneric
     :PrejoinPage="PreJoinPage"
-    :credentials="credentials"
     :connectMediaSFU="connectMediaSFU"
   />
   -->
@@ -671,15 +635,14 @@ const CustomMiniCard: Component = {
   <!-- 
   <MediasfuGeneric
     :PrejoinPage="PreJoinPage"
-    :credentials="credentials"
     :localLink="localLink"
     :connectMediaSFU="connectMediaSFU"
     :returnUI="false"
     :noUIPreJoinOptions="noUIPreJoinOptions"
     :sourceParameters="sourceParameters"
     :updateSourceParameters="updateSourceParameters"
-    :createMediaSFURoom="createRoomOnMediaSFU"
-    :joinMediaSFURoom="joinRoomOnMediaSFU"
+    :createMediaSFURoom="createRoomViaBackend"
+    :joinMediaSFURoom="joinRoomViaBackend"
   />
   -->
 
@@ -687,14 +650,13 @@ const CustomMiniCard: Component = {
   <!-- 
   <MediasfuGeneric
     :PrejoinPage="PreJoinPage"
-    :credentials="credentials"
     :connectMediaSFU="connectMediaSFU"
     :returnUI="false"
     :noUIPreJoinOptions="noUIPreJoinOptions"
     :sourceParameters="sourceParameters"
     :updateSourceParameters="updateSourceParameters"
-    :createMediaSFURoom="createRoomOnMediaSFU"
-    :joinMediaSFURoom="joinRoomOnMediaSFU"
+    :createMediaSFURoom="createRoomViaBackend"
+    :joinMediaSFURoom="joinRoomViaBackend"
   />
   -->
 
@@ -713,58 +675,13 @@ const CustomMiniCard: Component = {
 
   <MediasfuGeneric
     :prejoin-page="PreJoinPage"
-    :credentials="credentials"
     :local-link="localLink"
     :connect-media-s-f-u="connectMediaSFU"
     :return-u-i="returnUI"
     :no-u-i-pre-join-options="!returnUI ? noUIPreJoinOptions : undefined"
     :source-parameters="!returnUI ? sourceParameters : undefined"
     :update-source-parameters="!returnUI ? updateSourceParameters : undefined"
-    :create-media-s-f-u-room="createRoomOnMediaSFU"
-    :join-media-s-f-u-room="joinRoomOnMediaSFU"
+    :create-media-s-f-u-room="createRoomViaBackend"
+    :join-media-s-f-u-room="joinRoomViaBackend"
   />
 </template>
-
-<!--
-  =========================================================
-                      ADDITIONAL NOTES
-  =========================================================
-
-  Handling Core Methods:
-  Once `sourceParameters` is populated, you can call core methods like `clickVideo` or `clickAudio` directly:
-  Example:
-  sourceParameters.value.clickVideo({ ...sourceParameters.value });
-  sourceParameters.value.clickAudio({ ...sourceParameters.value });
-
-  This allows your custom UI to directly interact with MediaSFU functionalities.
-
-  Deprecated Features (Seed Data):
-  The seed data generation feature is deprecated. Avoid using `useLocalUIMode` or `useSeed` in new implementations.
-
-  Security Considerations:
-  - Do not expose real credentials in your frontend code in production.
-  - Use HTTPS and secure backend endpoints.
-  - Validate inputs and handle errors gracefully.
-
-  Example CE Backend Setup:
-  If using MediaSFU CE + MediaSFU Cloud, your backend might look like this:
-
-  app.post("/createRoom", async (req, res) => {
-    // Validate incoming dummy credentials
-    // Forward request to mediasfu.com with real credentials
-  });
-
-  app.post("/joinRoom", async (req, res) => {
-    // Validate incoming dummy credentials
-    // Forward request to mediasfu.com with real credentials
-  });
-
-  By doing so, you keep real credentials secure on your server.
-
-  End of Guide.
-
-  ========================
-  ====== END OF GUIDE ======
-  ========================
--->
-

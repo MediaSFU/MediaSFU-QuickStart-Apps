@@ -1,6 +1,6 @@
 ﻿# MediaSFU Flutter Quick Start
 
-Flutter starter for building a MediaSFU-powered real-time audio/video room with `mediasfu_sdk@2.2.8`.
+Flutter starter for building a MediaSFU-powered real-time audio/video room with `mediasfu_sdk@2.3.5`.
 
 Use this app when you want a Dart-based mobile or web meeting room, education app, telehealth flow, creator product, or cross-platform collaboration experience from one Flutter codebase.
 
@@ -8,7 +8,7 @@ Use this app when you want a Dart-based mobile or web meeting room, education ap
 
 - Installing the published MediaSFU Flutter SDK from pub.dev.
 - Running a MediaSFU room from a Flutter app.
-- Passing MediaSFU settings with `--dart-define`.
+- Routing create and join through an authenticated application backend.
 - Moving from prebuilt room UI to custom prejoin, `uiOverrides`, backend hooks, or custom layouts.
 
 ## Run
@@ -24,23 +24,15 @@ For web:
 flutter run -d chrome
 ```
 
-## Configure
-
-Flutter does not read `.env` automatically. Pass values with `--dart-define` or generate a local config file:
+For Linux desktop:
 
 ```bash
-flutter run \
-  --dart-define=MEDIASFU_API_USERNAME=your_api_username \
-  --dart-define=MEDIASFU_API_KEY=your_64_character_api_key \
-  --dart-define=MEDIASFU_LOCAL_LINK= \
-  --dart-define=MEDIASFU_CONNECT_MEDIASFU=true
+flutter run -d linux
 ```
 
-## Connection Modes
+## Configure secure room access
 
-- Cloud only: real credentials, empty local link, `connectMediaSFU=true`.
-- Self-hosted CE only: CE URL, `connectMediaSFU=false`.
-- CE plus Cloud egress: CE URL, dummy client credentials, backend keeps real credentials.
+Set the HTTPS application-backend URL in `lib/room_backend.dart` and attach the signed-in application's short-lived session in its HTTP layer. MediaSFU credentials never belong in Dart defines or the application bundle. Follow [Secure room setup](./SECURE_ROOM_SETUP.md) for the exact endpoints, observable result, failure cases, teardown, and release checklist.
 
 ## UI Paths
 

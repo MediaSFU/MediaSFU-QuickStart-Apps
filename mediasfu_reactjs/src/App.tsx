@@ -6,6 +6,7 @@ import {
   WelcomePageOptions,
   CreateMediaSFURoomOptions,
 } from 'mediasfu-reactjs';
+import { createRoomViaBackend, joinRoomViaBackend } from './roomBackend';
 
 /**
  * A custom pre-join page widget that can be used instead of the default MediaSFU pre-join page.
@@ -16,8 +17,7 @@ import {
  */
 const MyCustomPreJoinPage: React.FC<{
   options?: PreJoinPageOptions | WelcomePageOptions;
-  credentials: { apiUserName: string; apiKey: string };
-}> = ({ options, credentials }) => {
+}> = ({ options }) => {
   return (
     <div
       style={{
@@ -63,7 +63,7 @@ const MyCustomPreJoinPage: React.FC<{
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Hello, {credentials.apiUserName}!
+          Welcome!
         </h2>
         <p
           style={{
@@ -112,48 +112,12 @@ const MyCustomPreJoinPage: React.FC<{
 /**
  * The main application component for MediaSFU Modern UI.
  *
- * This component initializes the necessary credentials and configuration for the MediaSFU application
- * using the Modern UI components with glassmorphic design.
+ * This component initializes the MediaSFU application using the Modern UI.
  */
 const AppModern: React.FC = () => {
-  // =========================================================
-  //                API CREDENTIALS CONFIGURATION
-  // =========================================================
-
-  /**
-   * Scenario A: Not using MediaSFU Cloud at all.
-   * - Dummy credentials are needed to render PreJoinPage.
-   */
-  /*
-  const credentials = {
-    apiUserName: 'dummyUsr',
-    apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-  } as const;
-  const localLink = 'http://your-ce-server.com';
-  const connectMediaSFU = false;
-  */
-
-  /**
-   * Scenario B: Using MediaSFU CE + MediaSFU Cloud for Egress only.
-   */
-  /*
-  const credentials = {
-    apiUserName: 'dummyUsr',
-    apiKey: '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-  } as const;
-  const localLink = 'http://your-ce-server.com';
+  // Create and join requests are authorized by your application backend.
+  const localLink = '';
   const connectMediaSFU = true;
-  */
-
-  /**
-   * Scenario C: Using MediaSFU Cloud without your own server.
-   */
-  const credentials = {
-    apiUserName: 'yourDevUser',
-    apiKey: 'yourDevApiKey1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-  } as const;
-  const localLink = 'http://localhost:3000';
-  const connectMediaSFU = false;
 
   // =========================================================
   //                    UI RENDERING OPTIONS
@@ -210,8 +174,6 @@ const AppModern: React.FC = () => {
   // When PrejoinPage is not provided, the default WelcomePage is used internally
   return (
     <ModernMediasfuGeneric
-      // Pass your Credentials if you will be using MediaSFU Cloud
-      credentials={credentials}
       connectMediaSFU={connectMediaSFU}
       // Use your own MediaSFU server link if using MediaSFU Community Edition
       localLink={localLink}
@@ -222,9 +184,8 @@ const AppModern: React.FC = () => {
       // Source parameters for custom UI integration
       sourceParameters={!returnUI ? sourceParameters : undefined}
       updateSourceParameters={!returnUI ? updateSourceParameters : undefined}
-      // Provide custom room functions
-      // createMediaSFURoom={createRoomOnMediaSFU}
-      // joinMediaSFURoom={joinRoomOnMediaSFU}
+      createMediaSFURoom={createRoomViaBackend}
+      joinMediaSFURoom={joinRoomViaBackend}
       // Optional: Container styling for custom layouts
     />
   );
@@ -238,10 +199,11 @@ const AppModern: React.FC = () => {
   return (
     <ModernMediasfuGeneric
       PrejoinPage={({ options }) => (
-        <MyCustomPreJoinPage options={options} credentials={credentials} />
+        <MyCustomPreJoinPage options={options} />
       )}
-      credentials={credentials}
       connectMediaSFU={connectMediaSFU}
+      createMediaSFURoom={createRoomViaBackend}
+      joinMediaSFURoom={joinRoomViaBackend}
     />
   );
   */
@@ -251,11 +213,10 @@ const AppModern: React.FC = () => {
   return (
     <ModernMediasfuGeneric
       PrejoinPage={ModernPreJoinPage}
-      credentials={credentials}
       connectMediaSFU={connectMediaSFU}
       localLink={localLink}
-      createMediaSFURoom={createRoomOnMediaSFU}
-      joinMediaSFURoom={joinRoomOnMediaSFU}
+      createMediaSFURoom={createRoomViaBackend}
+      joinMediaSFURoom={joinRoomViaBackend}
     />
   );
   */
@@ -266,8 +227,9 @@ const AppModern: React.FC = () => {
   return (
     <ModernMediasfuGeneric
       PrejoinPage={PreJoinPage}
-      credentials={credentials}
       connectMediaSFU={connectMediaSFU}
+      createMediaSFURoom={createRoomViaBackend}
+      joinMediaSFURoom={joinRoomViaBackend}
       returnUI={false}
       noUIPreJoinOptions={noUIPreJoinOptionsCreate}
       sourceParameters={sourceParameters}
@@ -295,8 +257,9 @@ const AppModern: React.FC = () => {
 
   return (
     <ModernMediasfuGeneric
-      credentials={credentials}
       connectMediaSFU={connectMediaSFU}
+      createMediaSFURoom={createRoomViaBackend}
+      joinMediaSFURoom={joinRoomViaBackend}
       customVideoCard={modernVideoCard}
       customAudioCard={modernAudioCard}
       customMiniCard={modernMiniCard}

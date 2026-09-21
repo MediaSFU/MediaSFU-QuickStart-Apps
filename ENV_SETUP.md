@@ -1,49 +1,14 @@
-﻿# MediaSFU Environment Setup
+# MediaSFU server configuration boundary
 
-Use the root `.env.example` as the canonical template for all quick-start apps.
+MediaSFU service credentials belong only in the application backend's secret store. Do not put them in browser variables, mobile environment files, Dart defines, Gradle properties, BuildConfig, source code, screenshots, or client logs.
 
-```bash
-cp .env.example .env
-```
+Every runnable starter calls authenticated application routes:
 
-## Variables
+- `POST /api/mediasfu/rooms/create`
+- `POST /api/mediasfu/rooms/join`
 
-```env
-MEDIASFU_API_USERNAME=your_api_username
-MEDIASFU_API_KEY=your_64_character_api_key
-MEDIASFU_LOCAL_LINK=
-MEDIASFU_CONNECT_MEDIASFU=true
-```
+The client sends only the SDK room payload plus its normal application session. The backend authenticates the application user, authorizes the requested room action, validates and rate-limits the payload, adds MediaSFU credentials while making the server-to-server request, and returns the SDK-compatible response.
 
-| Variable | Purpose |
-| --- | --- |
-| `MEDIASFU_API_USERNAME` | MediaSFU Cloud API username. Keep real values out of committed files. |
-| `MEDIASFU_API_KEY` | MediaSFU Cloud API key. Keep real values server-side for production apps. |
-| `MEDIASFU_LOCAL_LINK` | Optional self-hosted MediaSFU CE server URL, such as `http://localhost:3000`. |
-| `MEDIASFU_CONNECT_MEDIASFU` | `true` for Cloud or CE plus Cloud egress; `false` for CE-only mode. |
+For browser apps, prefer same-origin secure cookies and enforce CSRF protection. For mobile apps, use the product's short-lived user session over HTTPS. Configure request deadlines, bounded retry behavior, safe error bodies, and audit logs that omit secrets and room secrets.
 
-## Connection Modes
-
-| Mode | Values |
-| --- | --- |
-| Cloud only | Real API username/key, empty `MEDIASFU_LOCAL_LINK`, `MEDIASFU_CONNECT_MEDIASFU=true`. |
-| Self-hosted CE only | Empty or dummy credentials, CE URL in `MEDIASFU_LOCAL_LINK`, `MEDIASFU_CONNECT_MEDIASFU=false`. |
-| CE plus Cloud egress | Dummy client credentials, CE URL in `MEDIASFU_LOCAL_LINK`, `MEDIASFU_CONNECT_MEDIASFU=true`; backend keeps real cloud credentials. |
-
-## Framework Mapping
-
-| App | Mapping |
-| --- | --- |
-| ReactJS / CRA | Use `REACT_APP_MEDIASFU_*` or map root values in app config before passing SDK props. |
-| Vue / Vite | Use `VITE_MEDIASFU_*` variables. |
-| React Native CLI | Uses `react-native-dotenv`; current config can read the root `.env`. |
-| React Native Expo | Use `EXPO_PUBLIC_MEDIASFU_*` variables or Expo app config. |
-| Angular | Use Angular environment files or a runtime config provider. |
-| Flutter | Use `--dart-define=MEDIASFU_API_USERNAME=...` or generate a local config file. |
-| Kotlin/Android | Pass Gradle properties or environment variables with the same root names. |
-
-## Production Guidance
-
-Do not ship real API credentials in browser or mobile bundles. For production, create backend endpoints that own the real MediaSFU credentials and pass custom create/join hooks to the SDK when the framework supports them.
-
-Use dummy client credentials only when a UI surface requires a credential-shaped value before your backend proxy performs the real request.
+Each starter's `SECURE_ROOM_SETUP.md` contains its exact URL configuration, callback file, success signal, failure cases, teardown expectations, and release checklist.

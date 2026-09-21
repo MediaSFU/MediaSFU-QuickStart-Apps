@@ -30,12 +30,11 @@ This repository is the fastest way to try MediaSFU Cloud, self-hosted MediaSFU C
 
 ## Quickest Path To A Room
 
-Clone the repo, copy the environment template, then run the app for your framework:
+Clone the repo, configure the application backend described by the selected starter, then run the app:
 
 ```bash
 git clone https://github.com/MediaSFU/MediaSFU-QuickStart-Apps.git
 cd MediaSFU-QuickStart-Apps
-cp .env.example .env
 cd mediasfu_reactjs
 npm install
 npm start
@@ -43,52 +42,24 @@ npm start
 
 For mobile and native apps, open the app folder README first because camera, microphone, simulator, emulator, signing, and device permissions vary by platform.
 
-## Configure MediaSFU
+## Configure secure room access
 
-All quick-starts share the same deployment model. Start with these canonical variables, then map them to the naming convention required by each framework:
-
-```env
-MEDIASFU_API_USERNAME=your_api_username
-MEDIASFU_API_KEY=your_64_character_api_key
-MEDIASFU_LOCAL_LINK=
-MEDIASFU_CONNECT_MEDIASFU=true
-```
-
-| Variable | What it controls |
-| --- | --- |
-| `MEDIASFU_API_USERNAME` | MediaSFU Cloud API username for cloud-backed room creation. |
-| `MEDIASFU_API_KEY` | MediaSFU Cloud API key. Keep real values out of public client bundles in production. |
-| `MEDIASFU_LOCAL_LINK` | Optional self-hosted MediaSFU CE URL, for example `http://localhost:3000`. |
-| `MEDIASFU_CONNECT_MEDIASFU` | `true` for Cloud or CE plus Cloud egress, `false` for CE-only mode. |
+Every runnable starter uses application-backend callbacks for create and join. Implement authenticated routes at `/api/mediasfu/rooms/create` and `/api/mediasfu/rooms/join`; authorize and validate the room payload there, and add MediaSFU credentials only while the backend calls MediaSFU. Each starter README links its exact platform setup, observable success, failure cases, cleanup, and release checklist.
 
 ## Deployment Modes
 
-| Mode | Use when | `localLink` | `connectMediaSFU` | Credential model |
+| Mode | Use when | `localLink` | `connectMediaSFU` | Room authority |
 | --- | --- | --- | --- | --- |
-| MediaSFU Cloud | You want the fastest hosted room path. | Empty | `true` | Real API username/key during local development. |
-| Self-hosted CE | You are running your own Community Edition server. | CE server URL | `false` | Empty or dummy client values, depending on SDK UI requirements. |
-| CE plus Cloud egress | You want local CE control with MediaSFU Cloud egress or services. | CE server URL | `true` | Dummy client values; real cloud credentials stay on your backend. |
-| Backend proxy | You are shipping a production browser or mobile app. | App-specific | App-specific | Client calls your backend; backend owns the real MediaSFU credentials. |
+| MediaSFU Cloud | You want the hosted room path. | Empty | `true` | Application backend. |
+| Self-hosted CE | You are running your own Community Edition server. | CE server URL | `false` | Application backend and CE policy. |
+| CE plus Cloud egress | You want local CE control with MediaSFU Cloud egress or services. | CE server URL | `true` | Application backend. |
+| Backend-mediated | You are shipping a browser or mobile app. | App-specific | App-specific | Client calls your authenticated backend; backend owns MediaSFU credentials. |
 
-For production, do not publish real MediaSFU API credentials in JavaScript, mobile bundles, or public repositories. Route create-room and join-room requests through your backend, then pass SDK hooks or endpoint responses into the app.
-
-## Framework Environment Mapping
-
-| App | Typical mapping |
-| --- | --- |
-| ReactJS / Create React App | `REACT_APP_MEDIASFU_*` variables or a local config mapping from `.env`. |
-| Vue / Vite | `VITE_MEDIASFU_*` variables. |
-| React Native CLI | `react-native-dotenv` can read the root `.env` values. |
-| React Native Expo | `EXPO_PUBLIC_MEDIASFU_*` variables or Expo app config. |
-| Angular | Angular environment files or a runtime config provider. |
-| Flutter | `--dart-define=MEDIASFU_API_USERNAME=...` or a generated local config layer. |
-| Kotlin/Android | Gradle properties or process environment variables with the canonical root names. |
-
-See [`ENV_SETUP.md`](./ENV_SETUP.md) for copy-paste examples and production notes.
+MediaSFU service credentials must not enter JavaScript, mobile source, public environment variables, application bundles, screenshots, or client logs. See [`ENV_SETUP.md`](./ENV_SETUP.md) for the server-owned configuration boundary.
 
 ## UI Approach
 
-Start with the prebuilt UI first. It verifies credentials, signaling, media permissions, and the basic room lifecycle before you spend time on custom controls.
+Start with the prebuilt UI first. It verifies backend-authorized room creation or joining, signaling, media permissions, and the basic room lifecycle before you spend time on custom controls.
 
 | Pattern | Use it for |
 | --- | --- |
@@ -106,12 +77,12 @@ These versions were checked against the public package registries before the qui
 
 | SDK | Package | Version | Validation path |
 | --- | --- | --- | --- |
-| ReactJS | `mediasfu-reactjs` | `4.2.8` | `npm install`, `npm run build` |
-| Angular | `mediasfu-angular` | `2.2.5` | `npm install`, `npm run build` |
-| Vue | `mediasfu-vue` | `1.0.5` | `npm install`, `npm run build` |
-| React Native CLI | `mediasfu-reactnative` | `2.3.7` | `npm install`, `npm test`, `npm run lint` |
-| React Native Expo | `mediasfu-reactnative-expo` | `2.4.2` | `npm install`, `npx expo-doctor` |
-| Flutter | `mediasfu_sdk` | `2.2.8` | `flutter pub get`, `flutter analyze`, `flutter test` |
+| ReactJS | `mediasfu-reactjs` | `4.3.5` | `npm install`, `npm run build` |
+| Angular | `mediasfu-angular` | `2.4.0` | `npm install`, `npm run build` |
+| Vue | `mediasfu-vue` | `1.2.0` | `npm install`, `npm run build` |
+| React Native CLI | `mediasfu-reactnative` | `2.4.4` | `npm install`, `npm test`, `npm run lint` |
+| React Native Expo | `mediasfu-reactnative-expo` | `2.5.4` | `npm install`, `npx expo-doctor` |
+| Flutter | `mediasfu_sdk` | `2.3.5` | `flutter pub get`, `flutter analyze`, `flutter test` |
 | Kotlin/Android | `com.mediasfu:mediasfu-sdk-android` | `1.0.3` | `./gradlew :app:assembleDebug` |
 | Kotlin Multiplatform | `com.mediasfu:mediasfu-sdk` | `1.0.3` | Reference for KMP/iOS bridge work |
 | Unity | `com.mediasfu.unity` | `0.1.0-preview.1` | UPM install and scene integration reference |
@@ -136,8 +107,8 @@ Each full app includes the same basic journey: install dependencies, configure M
 
 | Symptom | Check |
 | --- | --- |
-| Room does not create | Confirm `MEDIASFU_API_USERNAME`, `MEDIASFU_API_KEY`, and `MEDIASFU_CONNECT_MEDIASFU`. |
-| Self-hosted CE does not connect | Confirm `MEDIASFU_LOCAL_LINK`, CE server reachability, CORS, and HTTP/HTTPS expectations. |
+| Room does not create | Confirm the application session, backend authorization, payload validation, and the backend's MediaSFU response. |
+| Self-hosted CE does not connect | Confirm the selected starter's local link, CE reachability, CORS, and HTTP/HTTPS expectations. |
 | Camera or microphone is blank | Grant browser or device permissions; on mobile, test on a real device when simulator media support is limited. |
 | Mobile build fails after dependency updates | Clean native build caches and rerun install steps for the specific app folder. |
 | Expo doctor reports native package warnings | Check the Expo app README and installed SDK compatibility before upgrading Expo. |
